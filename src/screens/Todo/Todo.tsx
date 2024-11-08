@@ -11,8 +11,8 @@ export default function TodoApp() {
   const dispatch = useDispatch();
 
   const handleAddTodo = () => {
-    if (name && description) {
-      dispatch(addTodo({ id: Date.now(), name, description }));
+    if (name) {
+      dispatch(addTodo({ id: Date.now(), name, description: description || '' }));
       setName('');
       setDescription('');
     }
@@ -24,29 +24,46 @@ export default function TodoApp() {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Descr"
-        value={description}
-        onChangeText={setDescription}
-      />
-      <Button title="Add" onPress={handleAddTodo} />
+      <View>
+        <View style={styles.firstInputCart}>
+          <View>
+            <Text>
+              Name:
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+          />
+        </View>
+        <View style={styles.firstInputCart}>
+          <View>
+            <Text>
+              Descp:
+            </Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={description}
+            onChangeText={setDescription}
+          />
+        </View>
+        <TouchableOpacity onPress={handleAddTodo} style={styles.btn} >
+          <Text style={{ color: '#fff' }}>Add</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={todos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.todoItem}>
+            <View style={styles.circle}></View>
             <View>
               <Text style={styles.todoTitle}>{item.name}</Text>
-              <Text>{item.description}</Text>
+              <Text style={styles.todoDescp}>{item.description}</Text>
             </View>
-            <TouchableOpacity onPress={() => handleRemoveTodo(item.id)}>
+            <TouchableOpacity onPress={() => handleRemoveTodo(item.id)} style={{ backgroundColor: 'red' }}>
               <Text style={styles.deleteButton}>X</Text>
             </TouchableOpacity>
           </View>
@@ -59,26 +76,78 @@ export default function TodoApp() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    flex: 1,
+    marginTop: 50,
   },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
+    padding: 3,
+    marginLeft: 5,
+    width: '55%',
   },
   todoItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    padding: 5,
+    borderWidth: 1,
+    paddingHorizontal: 20
   },
   todoTitle: {
-    fontWeight: 'bold',
+    fontWeight: '500',
+    color: 'black',
+    fontSize: 18,
+  },
+  todoDescp: {
+    fontWeight: '100',
+    fontSize: 10
   },
   deleteButton: {
-    color: 'red',
+    color: '#fff',
     fontWeight: 'bold',
+    paddingVertical: 5,
+    paddingHorizontal: 10
   },
+  section: {
+    // flexDirection: 'column'
+  },
+  firstInputCart: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+    width: '100%',
+    justifyContent: 'flex-start',
+    // paddingRight:100,
+  },
+  secondInputCart: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+    marginRight: 100
+  },
+  btn: {
+    borderWidth: 1,
+    width: 70,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 13,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 0,
+    top: 20,
+    backgroundColor: 'blue',
+  },
+  circle: {
+    width: 8,
+    height: 8,
+    borderRadius: 100,
+    backgroundColor: 'green',
+    zIndex: 1,
+    position: 'absolute',
+    top: 10,
+    left: 5,
+  }
 });
